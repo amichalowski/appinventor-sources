@@ -5746,4 +5746,14 @@ public interface OdeMessages extends Messages {
   @Description("")
   String useFrontDeprecated();
 
+  @DefaultMessage("CountdownTime")
+  @Description("")
+  String CountdownTimeProperties();
+
+  @DefaultMessage("Fire")
+  @Description("")
+  String FireEvents();
+
+
+
 }
