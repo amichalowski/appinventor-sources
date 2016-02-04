@@ -1,5 +1,6 @@
 package com.google.appinventor.components.runtime;
 
+import android.app.Activity;
 import com.google.appinventor.components.annotations.*;
 import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.common.PropertyTypeConstants;
@@ -20,10 +21,13 @@ public class Timer extends AndroidNonvisibleComponent {
     /**
      * Creates a new AndroidNonvisibleComponent.
      *
-     * @param form the container that this component will be placed in
+     * @param container the container that this component will be placed in
      */
-    protected Timer(Form form) {
-        super(form);
+    private final Activity activity;
+
+    public Timer(ComponentContainer container) {
+        super(container.$form());
+        activity = container.$context();
     }
 
     @SimpleProperty(
@@ -43,15 +47,21 @@ public class Timer extends AndroidNonvisibleComponent {
 
     @SimpleFunction(description = "start timer")
     public void Start() {
+        final int localTime = time;
         AsynchUtil.runAsynchronously(new Runnable() {
                                          @Override
                                          public void run() {
                                              try {
-                                                 Thread.sleep(time);
+                                                 Thread.sleep(localTime);
                                              } catch (InterruptedException e) {
                                                  e.printStackTrace();
                                              }
-                                             Fire();
+                                             activity.runOnUiThread(new Runnable() {
+                                                 @Override
+                                                 public void run() {
+                                                     Fire();
+                                                 }
+                                             });
                                          }
                                      }
 
